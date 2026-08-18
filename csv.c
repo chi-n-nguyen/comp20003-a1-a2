@@ -1,3 +1,5 @@
+/* csv.c - see csv.h for the module's interface documentation. */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,7 +10,8 @@
 static void storeField(char *fields[], int *fieldCount, int maxFields,
                         const char *buffer, int bufferLength) {
     if (*fieldCount >= maxFields) {
-        fprintf(stderr, "Error: CSV line has more than %d fields.\n", maxFields);
+        fprintf(stderr, "Error: CSV line has more than %d fields.\n",
+                maxFields);
         exit(EXIT_FAILURE);
     }
 
@@ -33,6 +36,10 @@ int csvSplitLine(const char *line, char *fields[], int maxFields) {
         char c = line[i];
 
         if (inQuotes) {
+            /* A doubled quote inside a quoted field is a literal quote
+             * character, not the closing quote; line is nul-terminated,
+             * so line[i + 1] is always safe to read even on the last
+             * character. */
             if (c == '"' && line[i + 1] == '"') {
                 buffer[bufferLength++] = '"';
                 i++;
@@ -42,6 +49,9 @@ int csvSplitLine(const char *line, char *fields[], int maxFields) {
                 buffer[bufferLength++] = c;
             }
         } else if (c == '"' && bufferLength == 0) {
+            /* Only a quote at the very start of a field opens quoting;
+             * this matches the assignment's assumption that a quoted
+             * field always begins with '"' as its first character. */
             inQuotes = 1;
         } else if (c == ',') {
             storeField(fields, &fieldCount, maxFields, buffer, bufferLength);

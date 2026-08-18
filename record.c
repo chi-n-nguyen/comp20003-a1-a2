@@ -1,3 +1,6 @@
+/* record.c - see record.h for the module's interface documentation. */
+
+/* Needed for getline(), which is POSIX.1-2008 rather than C99. */
 #define _POSIX_C_SOURCE 200809L
 
 #include <stdio.h>

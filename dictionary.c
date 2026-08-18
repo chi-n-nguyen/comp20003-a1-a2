@@ -1,3 +1,5 @@
+/* dictionary.c - see dictionary.h for the module's interface documentation. */
+
 #include <stdlib.h>
 
 #include "dictionary.h"

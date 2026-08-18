@@ -1,3 +1,5 @@
+/* search.c - see search.h for the module's interface documentation. */
+
 #include <stdlib.h>
 
 #include "search.h"
@@ -19,7 +21,8 @@ SearchResult *searchByKey(Dictionary *dictionary, char *key) {
     DictNode *current = dictionary->head;
     while (current != NULL) {
         unsigned int bitsCompared = 0;
-        int comparison = bitwiseStrcmp(current->record->key, key, &bitsCompared);
+        int comparison =
+            bitwiseStrcmp(current->record->key, key, &bitsCompared);
 
         result->nodeComparisons++;
         result->stringComparisons++;
@@ -28,8 +31,8 @@ SearchResult *searchByKey(Dictionary *dictionary, char *key) {
         if (comparison == 0) {
             if (result->numMatches == matchCapacity) {
                 matchCapacity *= 2;
-                result->matches = safeRealloc(result->matches,
-                                               matchCapacity * sizeof(Record *));
+                size_t newSize = matchCapacity * sizeof(Record *);
+                result->matches = safeRealloc(result->matches, newSize);
             }
             result->matches[result->numMatches] = current->record;
             result->numMatches++;

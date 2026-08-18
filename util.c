@@ -1,3 +1,5 @@
+/* util.c - see util.h for the module's interface documentation. */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -24,7 +26,8 @@ void *safeRealloc(void *pointer, size_t size) {
 
 void stripLineEnding(char *line) {
     size_t length = strlen(line);
-    while (length > 0 && (line[length - 1] == '\n' || line[length - 1] == '\r')) {
+    while (length > 0 &&
+           (line[length - 1] == '\n' || line[length - 1] == '\r')) {
         line[length - 1] = '\0';
         length--;
     }

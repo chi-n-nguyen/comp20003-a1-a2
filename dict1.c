@@ -14,6 +14,7 @@
  *   ./dict1 1 <dataset.csv> <output.txt> < queries.in
  */
 
+/* Needed for getline(), which is POSIX.1-2008 rather than C99. */
 #define _POSIX_C_SOURCE 200809L
 
 #include <stdio.h>
@@ -32,7 +33,8 @@ static void runQueries(Dictionary *dictionary, FILE *outputFile);
 
 int main(int argc, char **argv) {
     if (argc != EXPECTED_ARGC) {
-        fprintf(stderr, "Usage: %s <stage> <csv-file> <output-file>\n", argv[0]);
+        fprintf(stderr, "Usage: %s <stage> <csv-file> <output-file>\n",
+                argv[0]);
         exit(EXIT_FAILURE);
     }
 

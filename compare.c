@@ -1,3 +1,5 @@
+/* compare.c - see compare.h for the module's interface documentation. */
+
 #include "compare.h"
 #include "bit.h"
 
