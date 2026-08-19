@@ -1,6 +1,6 @@
 /* dict1.c
  *
- * Created by: <Your Name> (<your student email>)
+ * Created by: Nhat Chi Nguyen (nhatchin@students.unimelb.edu.au)
  *
  * Stage 1 of the wildlife dictionary: builds a linked-list dictionary of
  * wildlife sighting records from a CSV dataset, then answers KEY lookup
