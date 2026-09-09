@@ -1,0 +1,10 @@
+AI Declaration
+==============
+
+Assignment: COMP20003 Assignment 1 (Stage 1 - dict1)
+Student email: nhtchi.nguyen@gmail.com
+
+AI tool used: Claude (Anthropic)
+
+Description of use:
+Claude was used for code review and testing of this submission.
