@@ -16,4 +16,13 @@
  * significant bit of s[0] as bit 0. */
 int getBit(char *s, unsigned int bitIndex);
 
+/* Allocates and returns a new buffer holding the numBits bits of oldKey
+ * starting at startBit (using the same left-to-right bit order as getBit()).
+ * The result is packed 8 bits per byte, with any leftover bits in the final
+ * byte padded with 0, so it is exactly (numBits + 7) / 8 bytes long. It is
+ * not a C string: it is not nul-terminated by this function and may not be
+ * safe to print or measure with strlen(). The caller owns the returned
+ * buffer and must free() it. */
+char *createStem(char *oldKey, unsigned int startBit, unsigned int numBits);
+
 #endif

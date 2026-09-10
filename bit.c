@@ -1,5 +1,7 @@
 #include "bit.h"
+#include "util.h"
 #include <assert.h>
+#include <string.h>
 
 int getBit(char *s, unsigned int bitIndex){
     assert(s);
@@ -20,4 +22,23 @@ int getBit(char *s, unsigned int bitIndex){
     */
     unsigned int bitOnly = maskedByte >> offset;
     return bitOnly;
+}
+
+char *createStem(char *oldKey, unsigned int startBit, unsigned int numBits){
+    assert(oldKey);
+
+    unsigned int totalBytes = (numBits + BITS_PER_BYTE - 1) / BITS_PER_BYTE;
+    char *newStem = safeMalloc(totalBytes);
+    memset(newStem, 0, totalBytes);
+
+    unsigned int i;
+    for (i = 0; i < numBits; i++) {
+        if (getBit(oldKey, startBit + i)) {
+            unsigned int byte = i / BITS_PER_BYTE;
+            unsigned int offset = BITS_PER_BYTE - (i % BITS_PER_BYTE) - 1;
+            newStem[byte] |= (1 << offset);
+        }
+    }
+
+    return newStem;
 }

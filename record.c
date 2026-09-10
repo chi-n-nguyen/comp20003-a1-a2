@@ -121,14 +121,14 @@ void freeRecord(Record *record) {
 }
 
 /* Field labels intentionally mirror the assignment's own sample output
- * rather than the dataset's literal CSV header spellings/case (e.g.
- * "Identifcat" not "Identificat", lowercase "latitude"/"longitude"), so
- * that output matches the provided test cases exactly. */
+ * rather than the dataset's literal CSV header case (e.g. lowercase
+ * "latitude"/"longitude"), so that output matches the provided test cases
+ * exactly. */
 void printRecordMatch(FILE *out, const Record *record) {
     fprintf(out,
             "--> KEY: %s || Taxa: %s || Kingdom: %s || Phylum: %s || "
             "Class: %s || Order: %s || Family: %s || Genus: %s || "
-            "Species: %s || Common_Name: %s || Identifcat: %s || "
+            "Species: %s || Common_Name: %s || Identificat: %s || "
             "Data_Resour: %s || Sighting_Da: %s || latitude: %.5Lf || "
             "longitude: %.5Lf || EZI_ADD: %s || \n",
             record->key, record->taxa, record->kingdom, record->phylum,

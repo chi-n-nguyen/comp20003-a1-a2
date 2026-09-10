@@ -1,0 +1,6 @@
+PLANTAE CHAROPHYTA EQUISETOPSIDA RANUNCULALES RANUNCULACEAE Rhagodia candolleana --> 1 records found - comparisons: b648 n3 s1
+PLANTAE CHAROPHYTA EQUISETOPSIDA RANUNCULALES RANUNCULACEAE Ragodia candolleana --> 1 records found - comparisons: b493 n3 s1
+PLANTAE CHAROPHYTA EQUISETOPSIDA SAPINDALES ANACARDIACEAE Schinus molle --> 1 records found - comparisons: b576 n3 s1
+PLANTAE CHAROPHYTA EQUISETOPSIDA SADINPALES ANACARDIACEAE Schinus molle --> 1 records found - comparisons: b284 n3 s1
+ANIMALIA CHORDATA AVES ANSERIFORMES ANATIDAE Anas superciliosa --> 21 records found - comparisons: b504 n2 s1
+ANIMALIA CHORDATA AVIAN ANSERIFORMES ANATIDAE Anas superciliosa --> 21 records found - comparisons: b165 n2 s1

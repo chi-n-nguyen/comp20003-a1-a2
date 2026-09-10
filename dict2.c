@@ -1,17 +1,20 @@
-/* dict1.c
+/* dict2.c
  *
  * Created by: Nhat Chi Nguyen (nhatchin@students.unimelb.edu.au)
  *
- * Stage 1 of the wildlife dictionary: builds a linked-list dictionary of
+ * Stage 2 of the wildlife dictionary: builds a Patricia tree dictionary of
  * wildlife sighting records from a CSV dataset, then answers KEY lookup
- * queries read from stdin. Matching records for each query are written
- * to the given output file (or NOTFOUND if there are none), and a
- * one-line summary - including bit, node, and string comparison counts
- * for that query - is written to stdout.
+ * queries read from stdin. A query with no exact match is treated as a
+ * misspelling: the closest key found by edit distance among the
+ * descendants of the point where the query's bits diverge from the tree is
+ * returned instead, acting as a spellchecker. Matching records for each
+ * query are written to the given output file (or NOTFOUND if the tree is
+ * empty), and a one-line summary - including bit, node, and string
+ * comparison counts for that query - is written to stdout.
  *
  * To run:
- *   make dict1
- *   ./dict1 1 <dataset.csv> <output.txt> < queries.in
+ *   make dict2
+ *   ./dict2 2 <dataset.csv> <output.txt> < queries.in
  */
 
 /* Needed for getline(), which is POSIX.1-2008 rather than C99. */
@@ -21,15 +24,15 @@
 #include <stdlib.h>
 
 #include "record.h"
-#include "dictionary.h"
-#include "search.h"
+#include "patricia.h"
+#include "patriciaSearch.h"
 #include "util.h"
 
-#define STAGE_LOOKUP 1
+#define STAGE_PATRICIA 2
 #define EXPECTED_ARGC 4
 
-static Dictionary *buildDictionary(const char *csvFilename);
-static void runQueries(Dictionary *dictionary, FILE *outputFile);
+static PatriciaTree *buildPatriciaTree(const char *csvFilename);
+static void runQueries(PatriciaTree *tree, FILE *outputFile);
 
 int main(int argc, char **argv) {
     if (argc != EXPECTED_ARGC) {
@@ -39,59 +42,59 @@ int main(int argc, char **argv) {
     }
 
     int stage = atoi(argv[1]);
-    if (stage != STAGE_LOOKUP) {
-        fprintf(stderr, "Error: dict1 only supports stage %d (lookup).\n",
-                STAGE_LOOKUP);
+    if (stage != STAGE_PATRICIA) {
+        fprintf(stderr, "Error: dict2 only supports stage %d (Patricia tree "
+                        "spellcheck lookup).\n", STAGE_PATRICIA);
         exit(EXIT_FAILURE);
     }
 
-    Dictionary *dictionary = buildDictionary(argv[2]);
+    PatriciaTree *tree = buildPatriciaTree(argv[2]);
 
     FILE *outputFile = fopen(argv[3], "w");
     if (outputFile == NULL) {
         fprintf(stderr, "Error: could not open output file '%s'.\n", argv[3]);
-        freeDictionary(dictionary);
+        freePatriciaTree(tree);
         exit(EXIT_FAILURE);
     }
 
-    runQueries(dictionary, outputFile);
+    runQueries(tree, outputFile);
 
     fclose(outputFile);
-    freeDictionary(dictionary);
+    freePatriciaTree(tree);
 
     return 0;
 }
 
 /* Reads every record out of the CSV file at csvFilename, in file order,
- * into a freshly built Dictionary. */
-static Dictionary *buildDictionary(const char *csvFilename) {
+ * into a freshly built PatriciaTree. */
+static PatriciaTree *buildPatriciaTree(const char *csvFilename) {
     FILE *csvFile = openDatasetFile(csvFilename);
     if (csvFile == NULL) {
         exit(EXIT_FAILURE);
     }
 
-    Dictionary *dictionary = createDictionary();
+    PatriciaTree *tree = createPatriciaTree();
 
     Record *record;
     while ((record = readNextRecord(csvFile)) != NULL) {
-        insertRecord(dictionary, record);
+        insertPatriciaRecord(tree, record);
     }
 
     fclose(csvFile);
-    return dictionary;
+    return tree;
 }
 
 /* Reads KEY queries from stdin, one per line, until end of file. Each
  * query's matches (or NOTFOUND) are written to outputFile, and a
  * comparison-count summary is written to stdout. */
-static void runQueries(Dictionary *dictionary, FILE *outputFile) {
+static void runQueries(PatriciaTree *tree, FILE *outputFile) {
     char *queryLine = NULL;
     size_t queryCapacity = 0;
 
     while (getline(&queryLine, &queryCapacity, stdin) != -1) {
         stripLineEnding(queryLine);
 
-        SearchResult *result = searchByKey(dictionary, queryLine);
+        SearchResult *result = searchPatriciaByKey(tree, queryLine);
 
         fprintf(outputFile, "%s\n", queryLine);
         if (result->numMatches == 0) {
